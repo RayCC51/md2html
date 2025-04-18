@@ -55,7 +55,6 @@ MOD=$(echo "$MOD" | sed -E '
     
     s/&lt;/\\</g
     s/&gt;/\\>/g
-    s/&amp;/&/g
   }
 ')
 
@@ -70,8 +69,7 @@ MOD=$(echo "$MOD" | sed -E '
 # blockquote
 BLOCKQUOTE() {
 MOD=$(echo "$MOD" | sed -E '
-  s/^&gt; (.*)/<blockquote>\n\1\n<\/blockquote>/
-  /^&gt; *$/d
+  s/^&gt; ?(.*)/<blockquote>\n\1\n<\/blockquote>/
 ')
 
 MOD=$(echo "$MOD" | sed -E '
@@ -99,7 +97,7 @@ MOD=$(echo "$MOD" | sed -E '
 
 # heading with id
 MOD=$(echo "$MOD" | sed -E '
-  s/^<h([1-6])>(.*) \{# ?(.*)\}<\/h\1>$/<h\1 id="\3"><a href="#\3">\2<\/a> 🔗<\/h\1>/
+  s/^<h([1-6])>(.*) ?\{# ?(.*)\}<\/h\1>$/<h\1 id="\3"><a href="#\3">\2<\/a> 🔗<\/h\1>/
 ')
 
 # hr
@@ -129,7 +127,7 @@ MOD=$(echo "$MOD" | sed -E '
 MOD=$(echo "$MOD" | sed -E '
   s/~~(.*)~~/<del>\1<\/del>/g
   s/==(.*)==/<mark>\1<\/mark>/g
-  s/([^\\]?)~(.*[^\\])~/\1<sub>\2<\/sub>/g
+  s/~(.*)~/<sub>\1<\/sub>/g
   s/([^\\]?)\^(.*[^\\])\^/\1<sup>\2<\/sup>/g
 ')
 
@@ -227,8 +225,8 @@ MOD=$(echo "$MOD" | sed -E '
 
 # thead tbody
 MOD=$(echo "$MOD" | sed -E '
-  s/^<table>$/<table>\n<thead>/
-  s/^<\/table>$/<\/tbody>\n<\/table>/
+  /^<table>$/ a\<thead>
+  /^<\/table>$/ i\<\/tbody>
 ')
 
 # td -> th
@@ -240,34 +238,20 @@ MOD=$(echo "$MOD" | sed -E '
 MOD=$(echo "$MOD" | sed -E '
   s/^( *)([^< ].*)$/<p>\1\2<\/p>/
   s/^(.*[^>])$/<p>\1<\/p>/
+  
+  s/^(<(em|strong|code|del|sup|sub|mark).*)$/<p>\1<\/p>/
 
-  s/^(<[em|strong|code|del|sup|sub|mark|].*)$/<p>\1<\/p>/
-    
   /<p> *<\/p>/d
   s/^<p> {4}+(.*)/<p class="indented">\1/
   s/  <\/p>$/<\/p>\n/
 ')
 
-# fixing p in blockquote
+# combine continuous p
 MOD=$(echo "$MOD" | sed -E '
-  /^<blockquote>$/,/^<\/blockquote>$/ {
-    /^<p>/ {
-      N
-      s/<\/p>\n<p>/<\/p>\n\n<p>/
-    }
-  }
-')
-
-# p clean empty line, combine continuous p in single p
-MOD=$(echo "$MOD" | sed -E '
-  /^<p>/ {
-    N
-    /^<p> *$\n<\/p>$/d
-  }
   /^<p>.*<\/p>$/ {
     :a
     N
-    /^<p>.*<\/p>\n<p>.*<\/p>$/ {
+    /<\/p>\n<p>/ {
       s/<\/p>\n<p>/\n/
       ba
     }
@@ -282,7 +266,7 @@ MOD=$(echo "$MOD" | sed -E '
   }
 ')
 
-# escape keys
+# return escape keys
 MOD=$(echo "$MOD" | sed -E '
   s/\\\\/\\/g
   s/\\\./\./g
