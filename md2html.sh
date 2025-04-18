@@ -217,7 +217,6 @@ MOD=$(echo "$MOD" | sed -E '
 ')
 
 # colgroup
-# todo: move |:- line to top
 MOD=$(echo "$MOD" | sed -E '
   /^<tr>[|:-]+<\/tr>$/ {
     h
