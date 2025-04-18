@@ -52,6 +52,7 @@ MOD=$(echo "$MOD" | sed -E '
     s/~/\\~/g
     s/=/\\=/g
     s/\^/\\^/g
+    s/^:/\\:/
     
     s/&lt;/\\</g
     s/&gt;/\\>/g
@@ -64,6 +65,12 @@ MOD=$(echo "$MOD" | sed -E '
     s/^/</
     s/$/>/
   }
+')
+
+# details summary html
+MOD=$(echo "$MOD" | sed -E '
+  s/&lt;(\/?details)&gt;/<\1>/
+  s/&lt;(\/?summary)&gt;/<\1>/g
 ')
 
 # blockquote
@@ -209,9 +216,58 @@ MOD=$(echo "$MOD" | sed -E '
   }
 ')
 
+# colgroup
+# todo: move |:- line to top
+MOD=$(echo "$MOD" | sed -E '
+  /^<tr>[|:-]+<\/tr>$/ {
+    h
+    G
+  }
+')
+
+MOD=$(echo "$MOD" | sed -E '
+  /^<table>$/ {
+    n
+    h
+    n
+    G
+  }
+')
+
+MOD=$(echo "$MOD" | sed -E '
+  /^<table>$/ {
+    n
+    d
+  }
+')
+
+MOD=$(echo "$MOD" | sed -E '
+  /^<table>$/ {
+    n
+    s/<\/?tr>//g
+    s/^\|/<colgroup>\n    <col>/
+    s/\|$/\n<\/colgroup>/
+  }
+')
+
+MOD=$(echo "$MOD" | sed -E '
+  /^    <col>/ {
+    s/\|/\n    <col>/g
+  }
+')
+
+MOD=$(echo "$MOD" | sed -E '
+  s/^    <col>-+$/    <col>/
+  s/^    <col>:-+$/    <col style="text-align: left;">/
+  s/^    <col>-+:$/    <col style="text-align: right;">/
+  s/^    <col>:-+:$/    <col style="text-align: center;">/
+')
+
 # thead tbody seperator
 MOD=$(echo "$MOD" | sed -E '
-  s/^<tr>[|:-]+<\/tr>$/<\/thead>\n<tbody>/
+  /^<table>$/,/^<\/table>$/ {
+    s/^<tr>[|:-]+<\/tr>$/<\/thead>\n<tbody>/
+  }
 ')
 
 # td
@@ -225,13 +281,42 @@ MOD=$(echo "$MOD" | sed -E '
 
 # thead tbody
 MOD=$(echo "$MOD" | sed -E '
-  /^<table>$/ a\<thead>
+  /^<\/colgroup>$/ a\<thead>
   /^<\/table>$/ i\<\/tbody>
 ')
 
 # td -> th
 MOD=$(echo "$MOD" | sed -E '
   /<thead>/,/<\/thead>/s/td>/th>/g
+')
+
+# dt
+MOD=$(echo "$MOD" | sed -E '
+  /.*/ {
+    N
+    s/(.*)\n(: .*)/<dl>\n<dt>\1<\/dt>\n<\/dl>\n\2/
+  }
+')
+
+# dl dd
+MOD=$(echo "$MOD" | sed -E '
+  s/^: (.*)$/<dl>\n<dd>\1<\/dd>\n<\/dl>/
+')
+
+# clean dl
+MOD=$(echo "$MOD" | sed -E '
+  /^<\/dl>$/ {
+    N
+    /<\/dl>\n<dl>/d
+  }
+')
+
+MOD=$(echo "$MOD" | sed -E '
+  /^<\/dl>$/ {
+    N
+    N
+    /<\/dl>\n\n<dl>/d
+  }
 ')
 
 # p
@@ -290,6 +375,7 @@ MOD=$(echo "$MOD" | sed -E '
   s/\\~/~/g
   s/\\=/=/g
   s/\\\^/^/g
+  s/^\\:/:/
 ')
 
 # output

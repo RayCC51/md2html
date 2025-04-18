@@ -20,10 +20,11 @@ it support extended markdown [mattcone/markdown-guide](https://github.com/mattco
 - does not support 
     - underscore(_) for bold, itallic. ex) "\_em\_" is not itallic
     - other elements inside list
-    - definition list (dl dt dd)
     - emoji shortcode like (:smile:). just use 😀 directly
+- HTMl
+    - support <details>, <summary>
+    - other html tags are not allowed
 - text above the "===" or "---" line does not converted to heading
-- can not use html tags
 - diffrent (-*+) in the same ul is supported
 - does not detect url link automatically
 - more then 5 backtick codeblock not working
@@ -34,10 +35,10 @@ it support extended markdown [mattcone/markdown-guide](https://github.com/mattco
 - list
     - can not handle more then 2 level indented list
     - can not use mixed ul ol
-- table
-    - table can not align
 - footnote
     - footnote name with space does not working
     - note with several lines not working
 - em, strong
     - * a **strong** inside em*
+- table
+    - the <thead> element can only contain one row
