@@ -75,11 +75,11 @@ MOD=$(echo "$MOD" | sed -E '
 
 # blockquote
 BLOCKQUOTE() {
-MOD=$(echo "$MOD" | sed -E '
+  MOD=$(echo "$MOD" | sed -E '
   s/^&gt; ?(.*)/<blockquote>\n\1\n<\/blockquote>/
 ')
 
-MOD=$(echo "$MOD" | sed -E '
+  MOD=$(echo "$MOD" | sed -E '
   /^<\/blockquote>$/ {
     N
     /<\/blockquote>\n<blockquote>/d
