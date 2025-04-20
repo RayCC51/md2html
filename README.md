@@ -22,7 +22,7 @@ it support extended markdown [mattcone/markdown-guide](https://github.com/mattco
     - other elements inside list
     - emoji shortcode like (:smile:). just use 😀 directly
 - HTMl
-    - support <details>, <summary>
+    - support <details>, <summary>, <br>, <!-- comment -->
     - other html tags are not allowed
 - text above the "===" or "---" line does not converted to heading
 - diffrent (-*+) in the same ul is supported
