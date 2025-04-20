@@ -113,7 +113,6 @@ MOD=$(echo "$MOD" | sed -E '
 ')
 
 # footnote
-# todo: remove whitespace in [^...]
 MOD=$(echo "$MOD" | sed -E '
   s/^\[\^(.*)\]: /[<a class="footnote" id="footnote-\1" href="#fn-\1">\1<\/a>]: /
   
@@ -291,15 +290,15 @@ MOD=$(echo "$MOD" | sed -E '
 
 # dt
 MOD=$(echo "$MOD" | sed -E '
-  /.*/ {
+  /^[^:]/ {
     N
-    s/(.*)\n(: .*)/<dl>\n<dt>\1<\/dt>\n<\/dl>\n\2/
+    s/^([^:].*)\n(: .*)/<dl>\n    <dt>\1<\/dt>\n<\/dl>\n\2/
   }
 ')
 
-# dl dd
+# dl dt
 MOD=$(echo "$MOD" | sed -E '
-  s/^: (.*)$/<dl>\n<dd>\1<\/dd>\n<\/dl>/
+  s/^: (.*)$/<dl>\n    <dd>\1<\/dd>\n<\/dl>/
 ')
 
 # clean dl
@@ -310,6 +309,7 @@ MOD=$(echo "$MOD" | sed -E '
   }
 ')
 
+# clean continuous dl
 MOD=$(echo "$MOD" | sed -E '
   /^<\/dl>$/ {
     N
