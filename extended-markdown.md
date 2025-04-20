@@ -273,3 +273,41 @@ foot[^1] note[^note] sup a
 
 [^note]: long
 ```
+
+# HTML Tags
+
+<!-- comment -->
+
+```md
+<!-- comment -->
+```
+
+<br>
+
+```md
+<br>
+```
+
+<details>
+<summary>details and summary</summary>
+open
+
+and
+
+close
+
+paragraph
+</details>
+
+```md
+<details>
+<summary>details and summary</summary>
+open
+
+and
+
+close
+
+paragraph
+</details>
+```

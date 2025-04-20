@@ -67,10 +67,20 @@ MOD=$(echo "$MOD" | sed -E '
   }
 ')
 
-# details summary html
+# html details summary
 MOD=$(echo "$MOD" | sed -E '
   s/&lt;(\/?details)&gt;/<\1>/
   s/&lt;(\/?summary)&gt;/<\1>/g
+')
+
+# html comment
+MOD=$(echo "$MOD" | sed -E '
+  s/&lt;(!-- .* --)&gt;/<\1>/
+')
+
+# html br
+MOD=$(echo "$MOD" | sed -E '
+  s/&lt;(br)&gt;/<\1>/
 ')
 
 # blockquote
