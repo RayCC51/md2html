@@ -21,6 +21,7 @@ MOD=$(echo "$MOD" | sed -E '
     a\<\/ul>
   }
 ')
+# can not seperate indented-blank-list, list-blank-list
 
 MOD=$(echo "$MOD" | sed -E '
   /^[-+*] / {
@@ -33,7 +34,6 @@ MOD=$(echo "$MOD" | sed -E '
 ')
 
 
-# can not seperate indented-blank-list, list-blank-list
 
 MOD=$(echo "$MOD" | sed -E '
   /^<ul>$/,/^<\/ul>$/ {

@@ -215,52 +215,6 @@ MOD=$(echo "$MOD" | sed -E '
   }
 ')
 
-# colgroup
-MOD=$(echo "$MOD" | sed -E '
-  /^<tr>[|:-]+<\/tr>$/ {
-    h
-    G
-  }
-')
-
-MOD=$(echo "$MOD" | sed -E '
-  /^<table>$/ {
-    n
-    h
-    n
-    G
-  }
-')
-
-MOD=$(echo "$MOD" | sed -E '
-  /^<table>$/ {
-    n
-    d
-  }
-')
-
-MOD=$(echo "$MOD" | sed -E '
-  /^<table>$/ {
-    n
-    s/<\/?tr>//g
-    s/^\|/<colgroup>\n    <col>/
-    s/\|$/\n<\/colgroup>/
-  }
-')
-
-MOD=$(echo "$MOD" | sed -E '
-  /^    <col>/ {
-    s/\|/\n    <col>/g
-  }
-')
-
-MOD=$(echo "$MOD" | sed -E '
-  s/^    <col>-+$/    <col>/
-  s/^    <col>:-+$/    <col style="text-align: left;">/
-  s/^    <col>-+:$/    <col style="text-align: right;">/
-  s/^    <col>:-+:$/    <col style="text-align: center;">/
-')
-
 # thead tbody seperator
 MOD=$(echo "$MOD" | sed -E '
   /^<table>$/,/^<\/table>$/ {
@@ -279,7 +233,7 @@ MOD=$(echo "$MOD" | sed -E '
 
 # thead tbody
 MOD=$(echo "$MOD" | sed -E '
-  /^<\/colgroup>$/ a\<thead>
+  /^<table>$/ a\<thead>
   /^<\/table>$/ i\<\/tbody>
 ')
 
