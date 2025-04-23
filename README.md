@@ -32,13 +32,9 @@ it support extended markdown [mattcone/markdown-guide](https://github.com/mattco
 ## bugs - [demo](https://raycc51.github.io/BashWrite/posts/markdown/md4html-bug.html)
 
 - list
-    - can not handle more then 2 level indented list
-    - can not use mixed ul ol
     - other elements inside the list
 - footnote
     - footnote name with space does not working well
     - note with several lines not working
-- em, strong
-    - * a **strong** inside em*
 - table
     - can not align
