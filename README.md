@@ -19,26 +19,26 @@ it support extended markdown [mattcone/markdown-guide](https://github.com/mattco
     - dot(.) after number inside unordered list. ex) - 1. this is ul
 - does not support 
     - underscore(_) for bold, itallic. ex) "\_em\_" is not itallic
-    - other elements inside list
     - emoji shortcode like (:smile:). just use 😀 directly
+    - auto detect link
+    - more then 5 backtick codeblock
+    - text above `---` or `===` line does not converted to heading
 - HTMl
-    - support <details>, <summary>, <br>, <!-- comment -->
+    - support tags: details, summary, br, comment
     - other html tags are not allowed
-- text above the "===" or "---" line does not converted to heading
 - diffrent (-*+) in the same ul is supported
-- does not detect url link automatically
-- more then 5 backtick codeblock not working
 
 
-## bugs
+## bugs - [demo](https://raycc51.github.io/BashWrite/posts/markdown/md4html-bug.html)
 
 - list
     - can not handle more then 2 level indented list
     - can not use mixed ul ol
+    - other elements inside the list
 - footnote
-    - footnote name with space does not working
+    - footnote name with space does not working well
     - note with several lines not working
 - em, strong
     - * a **strong** inside em*
 - table
-    - the <thead> element can only contain one row
+    - can not align
