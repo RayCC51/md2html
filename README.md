@@ -15,10 +15,9 @@ it support extended markdown [mattcone/markdown-guide](https://github.com/mattco
 ## diffrences from [mattcone/markdown-guide](https://github.com/mattcone/markdown-guide)
 
 - do not need to escape 
-    - angle brackets(<, >), underscore(_)
+    - angle brackets(<, >)
     - dot(.) after number inside unordered list. ex) - 1. this is ul
 - does not support 
-    - underscore(_) for bold, itallic. ex) "\_em\_" is not itallic
     - emoji shortcode like (:smile:). just use 😀 directly
     - auto detect link
     - more then 5 backtick codeblock
