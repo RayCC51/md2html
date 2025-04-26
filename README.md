@@ -15,16 +15,11 @@ it support extended markdown [mattcone/markdown-guide](https://github.com/mattco
 ## diffrences from [mattcone/markdown-guide](https://github.com/mattcone/markdown-guide)
 
 - do not need to escape 
-    - angle brackets(<, >)
     - dot(.) after number inside unordered list. ex) - 1. this is ul
 - does not support 
     - emoji shortcode like (:smile:). just use 😀 directly
-    - auto detect link
     - more then 5 backtick codeblock
     - text above `---` or `===` line does not converted to heading
-- HTMl
-    - support tags: details, summary, br, comment
-    - other html tags are not allowed
 - diffrent (-*+) in the same ul is supported
 
 
