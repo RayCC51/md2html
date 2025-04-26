@@ -3,22 +3,15 @@
 # input
 MOD=$(cat "$1")
 
-# escape < > &
-MOD=$(echo "$MOD" | sed -E '
-  s/&/\&amp;/g
-  s/</\&lt;/g
-  s/>/\&gt;/g
-')
-
 # 4 backtick codeblock
 MOD=$(echo "$MOD" | sed -E '
   /^````/ {
     N
-    s/````(.*)\n```/```\1\n\\`\\`\\`/
+    s/````(.*)\n```/```\1\n\&backtick;\&backtick;\&backtick;/
   }
   /^```$/ {
     N
-    s/```\n````/\\`\\`\\`\n```/
+    s/```\n````/\&backtick;\&backtick;\&backtick;\n```/
   }
 ')
 
@@ -29,9 +22,13 @@ MOD=$(echo "$MOD" | sed -E '
     :a
     N
     /```$/!ba
+    
+    s/</\&lt;/g
+    s/>/\&gt;/g
+    
     s/```([a-zA-Z0-9_]+)?\n/<pre><code class="language-\1">\n/
     s/```/<\/code><\/pre>/
-    s/ class="language-"//
+    s/(<pre><code) class="language-">/\1>/
 
     s/\\/\\\\/g
     s/\./\\\./g
@@ -39,24 +36,22 @@ MOD=$(echo "$MOD" | sed -E '
     s/#/\\#/g
     s/!/\\!/g
     s/\*/\\\*/g
-    s/\+/\\\+/g
     s/-/\\-/g
+    s/_/\\_/g
+    s/`/\\`/g
+    
     s/\(/\\\(/g
     s/\)/\\\)/g
     s/\{/\\\{/g
     s/\}/\\\}/g
     s/\[/\\\[/g
     s/\]/\\\]/g
-    s/`/\\`/g
 
-    s/_/\\_/g
-    s/~/\\~/g
-    s/=/\\=/g
-    s/\^/\\^/g
-    s/^:/\\:/
-    
-    s/&lt;/\\</g
-    s/&gt;/\\>/g
+    s/\+/\&plus;/g
+    s/~/\&tilde;/g
+    s/=/\&equal;/g
+    s/\^/\&caret;/g
+    s/^:/\&colon;/
   }
 ')
 
@@ -68,26 +63,34 @@ MOD=$(echo "$MOD" | sed -E '
   }
 ')
 
-# html details summary
+# escaping
 MOD=$(echo "$MOD" | sed -E '
-  s/&lt;(\/?details)&gt;/<\1>/
-  s/&lt;(\/?summary)&gt;/<\1>/g
-')
+  s/\\\\/\&backslash;/g
+  s/\\\*/\&asterisk;/g
+  s/\\\./\&dot;/g
+  s/\\\|/\&pipe;/g
 
-# html comment
-MOD=$(echo "$MOD" | sed -E '
-  s/&lt;(!-- .* --)&gt;/<\1>/
-')
+  s/\\`/\&backtick;/g
+  s/\\_/\&undnerscore;/g
+  s/\\#/\&sharp;/g
+  s/\\-/\&hyphen;/g
+  s/\\!/\&exclamation;/g
 
-# html br
-MOD=$(echo "$MOD" | sed -E '
-  s/&lt;br ?\/?&gt;/<br>/
+  s/\\\{/\&curlyleft;/g
+  s/\\\}/\&curlyright;/g
+  s/\\\[/\&squareleft;/g
+  s/\\\]/\&squareright;/g
+  s/\\\(/\&roundleft;/g
+  s/\\\)/\&roundright;/g
+
+  s/\\</\&lt;/g
+  s/\\>/\&gt;/g
 ')
 
 # blockquote
 BLOCKQUOTE() {
   MOD=$(echo "$MOD" | sed -E '
-  s/^&gt; ?(.*)/<blockquote>\n\1\n<\/blockquote>/
+  s/^> ?(.*)/<blockquote>\n\1\n<\/blockquote>/
 ')
 
   MOD=$(echo "$MOD" | sed -E '
@@ -99,7 +102,7 @@ BLOCKQUOTE() {
 }
 
 # indented blockquote
-while echo "$MOD" | grep -q '^&gt;'; do
+while echo "$MOD" | grep -q '^>'; do
   BLOCKQUOTE
 done
 
@@ -132,32 +135,35 @@ MOD=$(echo "$MOD" | sed -E '
 
 # bold italic code
 MOD=$(echo "$MOD" | sed -E '
-  s/\\\*/\&ast;/g
   s/\*\*\*([^*]+)\*\*\*/<strong><em>\1<\/em><\/strong>/g
   s/\*\*([^*]+)\*\*/<strong>\1<\/strong>/g
   s/(^|[^*])\*([^*]+)\*([^*]|$)/\1<em>\2<\/em>\3/g
   s/\*\*\*([^*]+)\*\*\*/<strong><em>\1<\/em><\/strong>/g
   s/\*\*([^*]+)\*\*/<strong>\1<\/strong>/g
-  s/\&ast;/\\*/g
 
-  s/\\_/\&und;/g
   s/___([^_]+)___/<strong><em>\1<\/em><\/strong>/g
   s/__([^_]+)__/<strong>\1<\/strong>/g
   s/(^|[^_])_([^_]+)_([^_]|$)/\1<em>\2<\/em>\3/g
   s/___([^_]+)___/<strong><em>\1<\/em><\/strong>/g
   s/__([^_]+)__/<strong>\1<\/strong>/g
-  s/\&und;/\\_/g
 
-  s/``(.*)``/\\`\1\\`/g
-  s/(^|[^\\])`([^`]*[^\\])`/\1<code>\2<\/code>/g
+  s/``(.*)``/\&backtick;\1\&backtick;/g
+  s/`([^`]*)`/<code>\1<\/code>/g
 ')
 
 # del, mark, sup, sub
 MOD=$(echo "$MOD" | sed -E '
   s/~~(.*)~~/<del>\1<\/del>/g
   s/==(.*)==/<mark>\1<\/mark>/g
-  s/([^\\]?)\^(.*[^\\])\^/\1<sup>\2<\/sup>/g
-  s/([^\\]?)~(.*[^\\])~/\1<sub>\2<\/sub>/g
+  s/\^(.*)\^/<sup>\1<\/sup>/g
+  s/~(.*)~/<sub>\1<\/sub>/g
+')
+
+# a, auto detect url
+MOD=$(echo "$MOD" | sed -E '
+  s/<((https?:\/\/)?(www\.)?[-a-zA-Z0-9@:%._\+~#=]{1,256}\.[a-zA-Z0-9()]{1,6}\b([-a-zA-Z0-9()@:%_\+.~#?&//=]*))>/<a href=\"\1\">\1<\/a>/
+
+  s/(^|[^\(">])(https?:\/\/(www\.)?[-a-zA-Z0-9@:%._\+~#=]{1,256}\.[a-zA-Z0-9()]{1,6}\b([-a-zA-Z0-9()@:%_\+.~#?&//=]*))/\1<a href=\"\2\">\2<\/a>/
 ')
 
 # img, a
@@ -165,7 +171,6 @@ MOD=$(echo "$MOD" | sed -E '
   s/!\[(.*)\]\((.*) "(.*)"\)/<figure>\n  <img src="\2" alt="\1" title="\3" loading="lazy">\n  <figcaption>\1<\/figcaption>\n<\/figure>/g
   s/!\[(.*)\]\((.*)\)/<figure>\n  <img src="\2" alt="\1" loading="lazy">\n  <figcaption>\1<\/figcaption>\n<\/figure>/g
 
-  s/&lt;(.*)&gt;/<a href="\1">\1<\/a>/g
   s/\[(.*)\]\((.*) "(.*)"\)/<a href="\2" title="\3">\1<\/a>/g
   s/\[(.*)\]\((.*)\)/<a href="\2">\1<\/a>/g
 ')
@@ -341,32 +346,31 @@ MOD=$(echo "$MOD" | sed -E '
   }
 ')
 
-# return escape keys
+# return escaping
 MOD=$(echo "$MOD" | sed -E '
-  s/\\\\/\\/g
-  s/\\\./\./g
-  s/\\\|/\|/g
-  s/\\#/#/g
-  s/\\!/!/g
-  s/\\\*/\*/g
-  s/\\\+/\+/g
-  s/\\-/-/g
-  s/\\\(/\(/g
-  s/\\\)/\)/g
-  s/\\\{/\{/g
-  s/\\\}/\}/g
-  s/\\\[/\[/g
-  s/\\\]/\]/g
-  s/\\`/`/g
-  s/\\</\&lt;/g
-  s/\\>/\&gt;/g
+  s/\&backslash;/\\/g
+  s/\&asterisk;/\*/g
+  s/\&dot;/\./g
+  s/\&pipe;/\|/g
 
-  s/\\_/_/g
-  s/\\`/`/g
-  s/\\~/~/g
-  s/\\=/=/g
-  s/\\\^/^/g
-  s/^\\:/:/
+  s/\&backtick;/`/g
+  s/\&undnerscore;/_/g
+  s/\&sharp;/#/g
+  s/\&hyphen;/-/g
+  s/\&exclamation;/!/g
+
+  s/\&curlyleft;/{/g
+  s/\&curlyright;/}/g
+  s/\&squareleft;/[/g
+  s/\&squareright;/]/g
+  s/\&roundleft;/(/g
+  s/\&roundright;/)/g
+
+  s/\&plus;/+/g
+  s/\&tilde;/~/g
+  s/\&equal;/=/g
+  s/\&caret;/\^/g
+  s/^\&colon;/:/g
 ')
 
 # output
