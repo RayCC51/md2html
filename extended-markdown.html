@@ -75,13 +75,13 @@ bold **strong**
 italic and bold ***em strong***
 </code></pre>
 
-<p>escape: \ . | # ! * + - \_ ( { [ \&lt; ``</p>
+<p>escape: \ . | # ! * + - _ ( { [ &lt; ``</p>
 
 <pre><code class="language-md">
-escape: \\ \. \| \# \! \* \+ \- \_ \( \{ \[ \&lt; ``
+escape: \\ \. \| \# \! \* \+ \- \_ \( \{ \[ \&lt; \``
 </code></pre>
 
-<p>`escape <code>backtick</code> in code`</p>
+<p><code>escape `backtick` in code</code></p>
 
 <pre><code class="language-md">
 ``escape `backtick` in code``
@@ -108,8 +108,7 @@ ___
 
 <ul>
 <li>unordered ul</li>
-<li>list li</li>
-<li>
+<p><li>list li</p>
 <ul>
 <li>indented</li>
 </ul>
@@ -126,8 +125,7 @@ ___
 
 <ol>
 <li>ordered ol</li>
-<li>list li</li>
-<li>
+<p><li>list li</p>
 <ol>
 <li>indented</li>
 </ol>
@@ -143,8 +141,7 @@ ___
 </code></pre>
 
 <ol>
-<li>mixed</li>
-<li>
+<p><li>mixed</p>
 <ul>
 <li>ul</li>
 </ul>
@@ -193,7 +190,7 @@ ___
 </code></pre>
 
 <figure>
-  <img src="https://place-hold.it/100x100" alt="img">
+  <img src="https://place-hold.it/100x100" alt="img" loading="lazy">
   <figcaption>img</figcaption>
 </figure>
 
@@ -202,7 +199,7 @@ ___
 </code></pre>
 
 <figure>
-  <img src="https://place-hold.it/100x100" alt="img alt" title="title">
+  <img src="https://place-hold.it/100x100" alt="img alt" title="title" loading="lazy">
   <figcaption>img alt</figcaption>
 </figure>
 
@@ -244,7 +241,7 @@ print("python")
 <p>strikethrough <del>del</del></p>
 
 <pre><code class="language-md">
-strikethrough &lt;sub>~del~&lt;/sub>
+strikethrough ~~del~~
 </code></pre>
 
 <p>highlight <mark>mark</mark></p>
@@ -256,7 +253,7 @@ highlight ==mark==
 <p><sub>sub</sub> script</p>
 
 <pre><code class="language-md">
-&lt;sub>sub&lt;/sub> script
+~sub~ script
 </code></pre>
 
 <p><sup>sup</sup>er script</p>
@@ -275,29 +272,29 @@ highlight ==mark==
 - [x] input type="checkbox" checked disabled
 </code></pre>
 
-<h3 id="extened"><a href="#extened">headling with id </a> 🔗</h3>
+<h3 id="extened">headling with id <a href="#extened"> 🔗</a></h3>
 
 <pre><code class="language-md">
 ### headling with id {#extened}
 </code></pre>
 
 <table>
-<thead>
+  <thead>
 <tr>
-    <th>t</th>
-    <th>a</th>
-    <th>b</th>
-    <th>l</th>
+<th>t</th>
+<th>a</th>
+<th>b</th>
+<th>l</th>
 </tr>
-</thead>
-<tbody>
+  </thead>
+  <tbody>
 <tr>
-    <td>.</td>
-    <td>l</td>
-    <td>c</td>
-    <td>r</td>
+<td>.</td>
+<td class="align-left">l</td>
+<td class="align-center">c</td>
+<td class="align-right">r</td>
 </tr>
-</tbody>
+  </tbody>
 </table>
 
 <pre><code class="language-md">
