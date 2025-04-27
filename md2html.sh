@@ -282,7 +282,8 @@ MOD=$(echo "$MOD" | sed -E '
       s/\|[ |:-]+\|/  <\/thead>\n  <tbody>/
     }
 
-    /^\|.*\|$/ {                                                        G
+    /^\|.*\|$/ {
+      G
       s/\n//
       s/^/<tr>\n/
       s/$/\n<\/tr>/
@@ -300,7 +301,7 @@ MOD=$(echo "$MOD" | sed -E '
 
     n
     $ a\  </tbody>\n</table>
-    /\|$/ ba
+    /^\|.*\|$/ ba
     i\  </tbody>\n</table>
   }
 ')
