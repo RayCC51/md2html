@@ -1,6 +1,6 @@
 # md2html.sh
 
-markdown to html converter written in pure bash(sed)
+markdown to html converter written in pure bash
 
 it support extended markdown [mattcone/markdown-guide](https://github.com/mattcone/markdown-guide)
 
@@ -19,16 +19,19 @@ it support extended markdown [mattcone/markdown-guide](https://github.com/mattco
 - does not support 
     - emoji shortcode like (:smile:). just use 😀 directly
     - more then 5 backtick codeblock
+    - double backtick
     - text above `---` or `===` line does not converted to heading
 - diffrent (-*+) in the same ul is supported
 
 
 ## bugs - [demo](https://raycc51.github.io/BashWrite/posts/markdown/md4html-bug.html)
 
+- codr
+    - double backtick
+    - escape special characters automatically
 - list
     - other elements inside the list
 - footnote
     - footnote name with space does not working well
     - note with several lines not working
-- table
-    - can not align
+    - footnote position? to bottom?
